@@ -63,15 +63,8 @@ module Enumerable
   # end of my_any
 
   # my_none
-  def my_none?
-    my_each do |item|
-      if block_given?
-        return false if yield item
-      else
-        return false if item
-      end
-    end
-    true
+  def my_none?(reg = nil, &block)
+    !my_any?(reg, &block)
   end
   # end of my_none
 
@@ -108,9 +101,6 @@ module Enumerable
     my_map
   end
   # end of map
-
-  # rubocop:disable Metrics/CyclomaticComplexity:
-  # rubocop:disable Metrics/PerceivedComplexity
 
   # my_inject
   def my_inject(num = nill?)

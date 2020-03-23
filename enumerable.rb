@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/ModuleLength
 module Enumerable
   def my_each
     return to_enumerable(:my_each) unless block_given?
@@ -83,10 +82,6 @@ module Enumerable
     end
     my_map
   end
-
-  # rubocop: disable Metrics/MethodLength
-
-  # rubocop: disable Style/IfInsideElse
 
   def my_inject(num = nill?)
     my_each do |x|

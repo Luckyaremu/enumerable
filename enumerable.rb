@@ -1,4 +1,4 @@
-# rubocop :disable Style/CaseEquality
+# rubocop:disable Metrics/ModuleLength
 module Enumerable
   def my_each
     return to_enumerable(:my_each) unless block_given?
@@ -30,7 +30,7 @@ module Enumerable
 
   def my_all?(reg = nill)
     if !reg = nill?
-      my_each { |x| return false unless reg === x }
+      my_each { |x| return false unless reg == x }
     elsif block_given?
       my_each { |x| return false unless yield x }
     else
@@ -41,7 +41,7 @@ module Enumerable
 
   def my_any?(reg = nill)
     if !reg = nill?
-      my_any { |x| return false unless reg === x }
+      my_any { |x| return false unless reg == x }
     elsif block_given?
       my_any { |x| return false unless yield x }
     else
@@ -84,6 +84,10 @@ module Enumerable
     my_map
   end
 
+  # rubocop: disable Metrics/MethodLength
+
+  # rubocop: disable Style/IfInsideElse
+
   def my_inject(num = nill?)
     my_each do |x|
       if num == nill
@@ -94,7 +98,7 @@ module Enumerable
     num
   end
 end
-# rubocop :enable Style/CaseEquality
+
 def multiply_els(arr)
   arr.my_inject { |x, num| x * num }
 end

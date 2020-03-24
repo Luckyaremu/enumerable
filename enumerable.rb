@@ -1,6 +1,6 @@
 module Enumerable
   def my_each
-    return to_enumerable(:my_each) unless block_given?
+    return to_enum(:my_each) unless block_given?
 
     each do |x|
       yield x
@@ -9,26 +9,28 @@ module Enumerable
   end
 
   def my_each_with_index
-    return to_enumerable(:my_each_with_index) unless block_given?
+    return to_enum __method__ unless block_given?
 
-    my_each_with_index do |x|
-      yield x
+    idx = 0
+    each do |x|
+      yield(x, idx)
+      idx += 1
     end
     self
   end
 
   def my_select
-    return to_enumerable unless block_given?
+    return to_enum unless block_given?
 
     array = []
-    my_select do |x|
+    my_each do |x|
       array.push(x) if yield(x) == true
     end
     array
   end
 
   def my_all?(reg = nill)
-    if !reg = nill?
+    if !reg.nill?
       my_each { |x| return false unless reg == x }
     elsif block_given?
       my_each { |x| return false unless yield x }
@@ -39,14 +41,15 @@ module Enumerable
   end
 
   def my_any?(reg = nill)
-    if !reg = nill?
-      my_any { |x| return false unless reg == x }
+    res = false
+    if !reg.nill?
+      my_each { |x| res = true if reg == x }
     elsif block_given?
-      my_any { |x| return false unless yield x }
+      my_each { |x| res = true if yield x }
     else
-      my_any { |x| return false unless x }
+      my_each { |x| res = true if x }
     end
-    true
+    res
   end
 
   def my_none?(reg = nil, &block)
@@ -56,7 +59,7 @@ module Enumerable
   def my_count(num = nill?)
     counter = 0
 
-    if number
+    if num
       my_each { |x| counter += 1 if num == x }
       counter
     elsif block_given?
@@ -68,7 +71,7 @@ module Enumerable
   end
 
   def my_map(proc = nil)
-    return to_enumerable(:my_map) if !block_given? && proc.nil?
+    return to_enum(:my_map) if !block_given? && proc.nil?
 
     array = []
     if !proc.nil?
@@ -80,20 +83,35 @@ module Enumerable
         array.push(yield(x))
       end
     end
-    my_map
+    arr
   end
 
-  def my_inject(num = nill?)
-    my_each do |x|
-      if num == nill
-      else
-        num = yield(x, num)
-      end
+  # rubocop:disable Metrics/CyclomaticComplexity:
+  # rubocop:disable Metrics/PerceivedComplexity
+
+  def my_inject(cum = nil, reg = nil)
+    arr = self.class == Range ? to_a : self
+    if cum.nil?
+      cum = arr[0]
+      index = 1
+    else
+      index = 0
     end
-    num
-  end
-end
 
-def multiply_els(arr)
-  arr.my_inject { |x, num| x * num }
+    (index...size).each do |x|
+      cum = yield(cum, arr[x]) if block_given?
+    end
+    return arr.reduce(cum) if reg.nil? && cum.is_a?(Symbol)
+    return cum *= arr.reduce(reg) if reg.is_a?(Symbol) && reg == :*
+    return cum += arr.reduce(reg) if reg.is_a?(Symbol) && cum.is_a?(Integer)
+
+    cum
+  end
+
+  # rubocop:enable Metrics/CyclomaticComplexity:
+  # rubocop:enable Metrics/PerceivedComplexity
+
+  def multiply_els(arr)
+    arr.my_inject { |x, num| x * num }
+  end
 end

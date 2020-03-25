@@ -1,3 +1,4 @@
+# rubocop: disable Metrics/ModuleLength
 module Enumerable
   def my_each
     return to_enum(:my_each) unless block_given?
@@ -29,66 +30,100 @@ module Enumerable
     array
   end
 
-  def my_all?(reg = nill)
-    if !reg.nill?
-      my_each { |x| return false unless reg == x }
-    elsif block_given?
-      my_each { |x| return false unless yield x }
-    else
-      my_each { |x| return false unless x }
+  def my_all?(proc = nill)
+    ar = self
+    return ar.self proc if proc
+
+    if block_given?
+      ar.my_each do |i|
+        next unless (yield i) == false
+
+        return false
+      end
+      return true
     end
+    return false if ar.include?(false) || ar.include?(nill)
+
     true
   end
 
-  def my_any?(reg = nill)
-    res = false
-    if !reg.nill?
-      my_each { |x| res = true if reg == x }
-    elsif block_given?
-      my_each { |x| res = true if yield x }
-    else
-      my_each { |x| res = true if x }
+  def my_any?(proc = nil)
+    ar = self
+    return ar.any?(proc) if proc
+
+    if block_given?
+      ar.my_each do |i|
+        next unless (yield i) == true
+
+        return true
+      end
+      return false
     end
-    res
+    return true if !ar.member?(nil) || ar.include?(true)
+
+    false
   end
 
-  def my_none?(reg = nil, &block)
-    !my_any?(reg, &block)
+  def my_none?(proc = nil)
+    ar = self
+    return ar.none?(proc) if proc
+
+    if block_given?
+      ar.my_each do |i|
+        next unless (yield i) == true
+
+        return false
+      end
+      return true
+    end
+    !ar[ar.length - 1]
   end
 
-  def my_count(num = nill?)
-    counter = 0
+  def my_count(proc = nil)
+    ar = self
+    i = 0
+    if proc
+      ar.my_each do |x|
+        next unless x == proc
 
-    if num
-      my_each { |x| counter += 1 if num == x }
-      counter
-    elsif block_given?
-      my_each { |x| counter += 1 if yield(x) }
-      counter
-    else
-      num
+        i += 1
+      end
+      return i
     end
+    if block_given?
+      ar.my_each do |x|
+        next unless (yield x) == true
+
+        i += 1
+      end
+      return i
+    end
+    ar.my_each do
+      i += 1
+    end
+    i
   end
 
   def my_map(proc = nil)
-    return to_enum(:my_map) if !block_given? && proc.nil?
-
-    array = []
-    if !proc.nil?
-      my_each do |x|
-        array.push(proc.call(x))
+    ar = self
+    new_arr = []
+    unless proc.nil?
+      ar.each do |x|
+        return false unless proc.yield x
       end
-    else
-      my_each do |x|
-        array.push(yield(x))
-      end
+      return true
     end
-    arr
+    return to_enum unless block_given? && proc.nil?
+
+    ar.my_each do |j|
+      a = yield j
+      new_arr.append(a)
+    end
+    new_arr
   end
 
-  # rubocop:disable Metrics/CyclomaticComplexity:
   # rubocop:disable Metrics/PerceivedComplexity
-
+  # rubocop: disable Metrics/CyclomaticComplexity
   def my_inject(cum = nil, reg = nil)
     arr = self.class == Range ? to_a : self
     if cum.nil?
@@ -108,10 +143,10 @@ module Enumerable
     cum
   end
 
-  # rubocop:enable Metrics/CyclomaticComplexity:
   # rubocop:enable Metrics/PerceivedComplexity
-
+  # rubocop: enable Metrics/CyclomaticComplexity
   def multiply_els(arr)
     arr.my_inject { |x, num| x * num }
   end
 end
+# rubocop: enable Metrics/ModuleLength

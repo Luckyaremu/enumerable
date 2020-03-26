@@ -30,7 +30,7 @@ module Enumerable
     array
   end
 
-  def my_all?(proc = nill)
+  def my_all?(proc = nil)
     ar = self
     return ar.self proc if proc
 

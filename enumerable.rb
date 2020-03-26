@@ -42,7 +42,7 @@ module Enumerable
       end
       return true
     end
-    return false if ar.include?(false) || ar.include?(nill)
+    return false if ar.include?(false) || ar.include?(nil)
 
     true
   end

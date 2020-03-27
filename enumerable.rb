@@ -13,7 +13,7 @@ module Enumerable
     return to_enum __method__ unless block_given?
 
     idx = 0
-    my_each do |x|
+    each do |x|
       yield(x, idx)
       idx += 1
     end
@@ -124,6 +124,7 @@ module Enumerable
 
   # rubocop:disable Metrics/PerceivedComplexity
   # rubocop: disable Metrics/CyclomaticComplexity
+
   def my_inject(cum = nil, reg = nil)
     arr = self.class == Range ? to_a : self
     if cum.nil?
@@ -145,8 +146,19 @@ module Enumerable
 
   # rubocop:enable Metrics/PerceivedComplexity
   # rubocop: enable Metrics/CyclomaticComplexity
+
   def multiply_els(arr)
     arr.my_inject { |x, num| x * num }
   end
 end
 # rubocop: enable Metrics/ModuleLength
+
+arr = [1, 2, 3, 4, 5, 6]
+t = [nil, true, '']
+p arr.each.class == arr.my_each.class
+p t.my_none? == t.none?
+p t.any? == t.my_any?
+p t.each_with_index.class == t.my_each_with_index.class
+p t.count == t.my_count
+p t.map.class == t.my_map.class
+p arr.inject(:+) == arr.my_inject(:+)

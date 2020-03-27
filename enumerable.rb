@@ -52,7 +52,7 @@ module Enumerable
     return ar.any?(proc) if proc
 
     if block_given?
-      ar.my_each do |i|
+      my_each do |i|
         next unless (yield i) == true
 
         return true
@@ -69,7 +69,7 @@ module Enumerable
     return ar.none? proc if proc
 
     if block_given?
-      ar.my_each do |i|
+      my_each do |i|
         next unless (yield i) == true
 
         return false
@@ -83,7 +83,7 @@ module Enumerable
     ar = self
     i = 0
     if proc
-      ar.my_each do |x|
+      my_each do |x|
         next unless x == proc
 
         i += 1
@@ -108,7 +108,7 @@ module Enumerable
     ar = self
     new_arr = []
     unless proc.nil?
-      ar.each do |x|
+      each do |x|
         return false unless proc.yield x
       end
       return true

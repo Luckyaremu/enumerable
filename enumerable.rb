@@ -3,7 +3,7 @@ module Enumerable
   def my_each
     return to_enum(:my_each) unless block_given?
 
-    each do |x|
+    self.each do |x|
       yield x
     end
     self
@@ -13,7 +13,7 @@ module Enumerable
     return to_enum __method__ unless block_given?
 
     idx = 0
-    each do |x|
+    my_each do |x|
       yield(x, idx)
       idx += 1
     end
@@ -32,7 +32,7 @@ module Enumerable
 
   def my_all?(proc = nil)
     ar = self
-    return ar.self if proc
+    return ar.all? if proc
 
     if block_given?
       ar.my_each do |i|
@@ -49,7 +49,7 @@ module Enumerable
 
   def my_any?(proc = nil)
     ar = self
-    return self?(proc) if proc
+    return ar.any?(proc) if proc
 
     if block_given?
       ar.my_each do |i|
@@ -66,7 +66,7 @@ module Enumerable
 
   def my_none?(proc = nil)
     ar = self
-    return self? proc if proc
+    return ar.none? proc if proc
 
     if block_given?
       ar.my_each do |i|

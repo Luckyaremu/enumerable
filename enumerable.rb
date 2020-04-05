@@ -2,6 +2,7 @@
 module Enumerable
   def my_each
     return to_enum unless block_given?
+
     i = 0
     array = []
     while i < size
@@ -14,6 +15,7 @@ module Enumerable
 
   def my_each_with_index
     return to_enum unless block_given?
+
     i = 0
     array = []
     while i < size
@@ -70,7 +72,7 @@ module Enumerable
 
   def my_none?(proc = nil)
     ar = self
-    return ar  proc if proc
+    return ar proc if proc
 
     if block_given?
       my_each do |i|

@@ -1,24 +1,27 @@
 # rubocop: disable Metrics/ModuleLength
 module Enumerable
   def my_each
-    return to_enum(:my_each) unless block_given?
-
-    ar = self
-    ar.each do |x|
-      yield x
+    return to_enum unless block_given?
+    i = 0
+    array = []
+    while i < size
+      yield to_a[i]
+      array << to_a[i]
+      i += 1
     end
-    self
+    array
   end
 
   def my_each_with_index
-    return to_enum __method__ unless block_given?
-
-    idx = 0
-    my_each do |x|
-      yield(x, idx)
-      idx += 1
+    return to_enum unless block_given?
+    i = 0
+    array = []
+    while i < size
+      yield to_a[i], i
+      array << to_a[i]
+      i += 1
     end
-    self
+    array
   end
 
   def my_select
@@ -33,7 +36,7 @@ module Enumerable
 
   def my_all?(proc = nil)
     ar = self
-    return ar.all? if proc
+    return ar if proc
 
     if block_given?
       ar.my_each do |i|
@@ -50,7 +53,7 @@ module Enumerable
 
   def my_any?(proc = nil)
     ar = self
-    return ar.any?(proc) if proc
+    return ar if proc
 
     if block_given?
       my_each do |i|
@@ -67,7 +70,7 @@ module Enumerable
 
   def my_none?(proc = nil)
     ar = self
-    return ar.none? proc if proc
+    return ar  proc if proc
 
     if block_given?
       my_each do |i|

@@ -115,6 +115,7 @@ module Enumerable
   end
 
   # rubocop:disable Metrics/PerceivedComplexity
+  # rubocop: disable Metrics/CyclomaticComplexity
 
   def my_inject(cum = nil, reg = nil)
     arr = self.class == Range ? to_a : self
@@ -136,6 +137,7 @@ module Enumerable
   end
 
   # rubocop:enable Metrics/PerceivedComplexity
+  # rubocop: enable Metrics/CyclomaticComplexity
 
   def multiply_els(arr)
     arr.my_inject { |x, num| x * num }

@@ -61,7 +61,7 @@ module Enumerable
 
   def my_none?(_proc = nil)
     res = false
-    if !reg.nil?
+    if !proc.nil?
       my_each { |x| res = true if reg == x }
     elsif block_given?
       my_each { |x| res = true if yield(x) }
@@ -144,12 +144,3 @@ module Enumerable
   end
 end
 # rubocop: enable Metrics/ModuleLength
-# arr = [1, 2, 3, 4, 5, 6]
-# t = [nil, true, '']
-# p arr.each.class == arr.my_each.class
-# p t.my_none? == t.none?
-# p t.any? == t.my_any?
-# p t.each_with_index.class == t.my_each_with_index.class
-# p t.count == t.my_count
-# p t.map.class == t.my_map.class
-# p arr.inject(:+) == arr.my_inject(:+)

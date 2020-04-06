@@ -13,22 +13,22 @@ Metrics/MethodLength:
 Metrics/AbcSize:
   Max: 50
 Metrics/ClassLength:
-  Max: 200
+  Max: 150
 Metrics/BlockLength:
   ExcludedMethods: ['describe']
   Max: 30
 
 
 Style/Documentation:
-  Enabled: true
+  Enabled: false
 Style/ClassAndModuleChildren:
-  Enabled: true
+  Enabled: false
 Style/EachForSimpleLoop:
-  Enabled: true
+  Enabled: false
 Style/AndOr:
-  Enabled: true
+  Enabled: false
 Style/DefWithParentheses:
-  Enabled: true
+  Enabled: false
 Style/FrozenStringLiteralComment:
   EnforcedStyle: never
 

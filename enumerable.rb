@@ -36,53 +36,39 @@ module Enumerable
     array
   end
 
-  def my_all?(proc = nil)
-    ar = self
-    return ar if proc
-
-    if block_given?
-      ar.my_each do |i|
-        next unless (yield i) == false
-
-        return false
-      end
-      return true
+  def my_all?(reg = nil)
+    if !reg.nil?
+      my_each { |x| return false unless reg === x }
+    elsif block_given?
+      my_each { |x| return false unless yield x }
+    else
+      my_each { |x| return false unless x }
     end
-    return false if ar.include?(false) || ar.include?(nil)
-
     true
   end
 
-  def my_any?(proc = nil)
-    ar = self
-    return ar if proc
-
-    if block_given?
-      my_each do |i|
-        next unless (yield i) == true
-
-        return true
-      end
-      return false
+  def my_any?(reg = nil)
+    res = false
+    if !reg.nil?
+      my_each { |x| res = true if reg === x }
+    elsif block_given?
+      my_each { |x| res = true if yield(x) }
+    else
+      my_each { |x| res = true if x }
     end
-    return true if !ar.member?(nil) || ar.include?(true)
-
-    false
+    res
   end
 
   def my_none?(proc = nil)
-    ar = self
-    return ar proc if proc
-
-    if block_given?
-      my_each do |i|
-        next unless (yield i) == true
-
-        return false
-      end
-      return true
+    res = false
+    if !reg.nil?
+      my_each { |x| res = true if reg === x }
+    elsif block_given?
+      my_each { |x| res = true if yield(x) }
+    else
+      my_each { |x| res = true if x }
     end
-    !ar[ar.length - 1]
+    res
   end
 
   def my_count(proc = nil)

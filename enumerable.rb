@@ -38,7 +38,7 @@ module Enumerable
 
   def my_all?(reg = nil)
     if !reg.nil?
-      my_each { |x| return false unless reg === x }
+      my_each { |x| return false unless reg == x }
     elsif block_given?
       my_each { |x| return false unless yield x }
     else
@@ -50,7 +50,7 @@ module Enumerable
   def my_any?(reg = nil)
     res = false
     if !reg.nil?
-      my_each { |x| res = true if reg === x }
+      my_each { |x| res = true if reg == x }
     elsif block_given?
       my_each { |x| res = true if yield(x) }
     else
@@ -59,10 +59,10 @@ module Enumerable
     res
   end
 
-  def my_none?(proc = nil)
+  def my_none?(_proc = nil)
     res = false
     if !reg.nil?
-      my_each { |x| res = true if reg === x }
+      my_each { |x| res = true if reg == x }
     elsif block_given?
       my_each { |x| res = true if yield(x) }
     else

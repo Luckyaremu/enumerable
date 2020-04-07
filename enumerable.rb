@@ -47,7 +47,7 @@ module Enumerable
       my_each { |x| return false if yield(x) == false }
     elsif arg.class == Regexp
       my_each { |x| return false if arg.mat(x).nil? }
-    elsif arg.class <= Num || arg.class <= String
+    elsif arg.class <= Numeric || arg.class <= String
       my_each { |x| return false if x != arg }
     else
       my_each { |x| return false if (x.is_a? arg) == false }
@@ -63,7 +63,7 @@ module Enumerable
       my_each { |x| return true if yield(x) == true }
     elsif arg.class == Regexp
       my_each { |x| return true if arg.mat(x).nil? }
-    elsif arg.class <= Num || arg.class <= String
+    elsif arg.class <= Numeric || arg.class <= String
       my_each { |x| return true if x != arg }
     else
       my_each { |x| return true if (x.is_a? arg) == true }
@@ -79,7 +79,7 @@ module Enumerable
       my_each { |x| return false if yield(x) == true }
     elsif arg.class == Regexp
       my_each { |x| return false if arg.mat(x).nil? }
-    elsif arg.class <= Num || arg.class <= String
+    elsif arg.class <= Numeric || arg.class <= String
       my_each { |x| return false if x != arg }
     else
       my_each { |x| return false if (x.is_a? arg) == false }
@@ -88,7 +88,7 @@ module Enumerable
   end
 
   def my_count(proc = nil)
-    ar = self
+    arr = self
     i = 0
     if proc
       my_each do |x|
@@ -99,14 +99,14 @@ module Enumerable
       return i
     end
     if block_given?
-      ar.my_each do |x|
+      arr.my_each do |x|
         next unless (yield x) == true
 
         i += 1
       end
       return i
     end
-    ar.my_each do
+    arr.my_each do
       i += 1
     end
     i
@@ -169,4 +169,18 @@ module Enumerable
     arr.my_inject { |x, num| x * num }
   end
 end
+
 # rubocop: enable Metrics/ModuleLength
+
+p [1,2,3,4,5].my_all?
+p [1,2,3,4,5].my_any?
+p [1,2,3,4,5].my_none?
+
+arr = [1, 2, 3, 4, 5, 6]
+t = [nil, true,1, '']
+p arr.each.class == arr.my_each.class
+p t.each_with_index.class == t.my_each_with_index.class
+p t.my_select.class == t.my_select.class
+p t.count == t.my_count
+p t.map.class == t.my_map.class
+p arr.inject(:+) == arr.my_inject(:+)

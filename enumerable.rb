@@ -36,39 +36,55 @@ module Enumerable
     array
   end
 
-  def my_all?(reg = nil)
-    if !reg.nil?
-      my_each { |x| return false unless reg == x }
-    elsif block_given?
-      my_each { |x| return false unless yield x }
+  # rubocop:disable Metrics/PerceivedComplexity
+  # rubocop: disable Metrics/CyclomaticComplexity
+
+  def my_all?(arg = nil)
+    return true if !block_given? && arg.nil? && include?(nil) == false && include?(false) == false
+    return false unless block_given? || !arg.nil?
+
+    if block_given?
+      my_each { |x| return false if yield(x) == false }
+    elsif arg.class == Regexp
+      my_each { |x| return false if arg.mat(x).nil? }
+    elsif arg.class <= Num || arg.class <= String
+      my_each { |x| return false if x != arg }
     else
-      my_each { |x| return false unless x }
+      my_each { |x| return false if (x.is_a? arg) == false }
     end
     true
   end
 
-  def my_any?(reg = nil)
-    res = false
-    if !reg.nil?
-      my_each { |x| res = true if reg == x }
-    elsif block_given?
-      my_each { |x| res = true if yield(x) }
+  def my_any?(arg = nil)
+    return true if !block_given? && arg.nil? && include?(nil) == false && include?(false) == false
+    return false unless block_given? || !arg.nil?
+
+    if block_given?
+      my_each { |x| return true if yield(x) == true }
+    elsif arg.class == Regexp
+      my_each { |x| return true if arg.mat(x).nil? }
+    elsif arg.class <= Num || arg.class <= String
+      my_each { |x| return true if x != arg }
     else
-      my_each { |x| res = true if x }
+      my_each { |x| return true if (x.is_a? arg) == true }
     end
-    res
+    true
   end
 
-  def my_none?(_proc = nil)
-    res = false
-    if !proc.nil?
-      my_each { |x| res = true if reg == x }
-    elsif block_given?
-      my_each { |x| res = true if yield(x) }
+  def my_none?(arg = nil)
+    return true if !block_given? && arg.nil? && include?(nil) == false && include?(false) == false
+    return false unless block_given? || !arg.nil?
+
+    if block_given?
+      my_each { |x| return false if yield(x) == true }
+    elsif arg.class == Regexp
+      my_each { |x| return false if arg.mat(x).nil? }
+    elsif arg.class <= Num || arg.class <= String
+      my_each { |x| return false if x != arg }
     else
-      my_each { |x| res = true if x }
+      my_each { |x| return false if (x.is_a? arg) == false }
     end
-    res
+    true
   end
 
   def my_count(proc = nil)
@@ -114,27 +130,37 @@ module Enumerable
     new_arr
   end
 
-  # rubocop:disable Metrics/PerceivedComplexity
-  # rubocop: disable Metrics/CyclomaticComplexity
+  # rubocop: disable Metrics/MethodLength
 
-  def my_inject(cum = nil, reg = nil)
-    arr = self.class == Range ? to_a : self
-    if cum.nil?
-      cum = arr[0]
-      index = 1
-    else
-      index = 0
+  def my_inject(cum = nil, arg = nil)
+    arr = to_a
+    if block_given?
+      if cum.nil?
+        mat = arr[0]
+        arr[1...arr.length].my_each do |x|
+          mat = yield(acc, x)
+        end
+      else
+        mat = cum
+        arr.my_each do |x|
+          mat = yield(mat, x)
+        end
+      end
+    elsif !cum.nil? && !arg.nil?
+      mat = cum
+      my_each do |x|
+        mat = mat.send(arg, x)
+      end
+    elsif !cum.nil? && arg.nil?
+      mat = self[0]
+      arr[1...arr.length].my_each do |x|
+        mat = mat.send(cum, x)
+      end
     end
-
-    (index...size).each do |x|
-      cum = yield(cum, arr[x]) if block_given?
-    end
-    return arr(cum) if reg.nil? && cum.is_a?(Symbol)
-    return cum *= arr(reg) if reg.is_a?(Symbol) && reg == :*
-    return cum += arr(reg) if reg.is_a?(Symbol) && cum.is_a?(Integer)
-
-    cum
+    mat
   end
+
+  # rubocop: enable Metrics/MethodLength
 
   # rubocop:enable Metrics/PerceivedComplexity
   # rubocop: enable Metrics/CyclomaticComplexity

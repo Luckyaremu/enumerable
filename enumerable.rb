@@ -129,9 +129,9 @@ module Enumerable
     (index...size).each do |x|
       cum = yield(cum, arr[x]) if block_given?
     end
-    return arr.reduce(cum) if reg.nil? && cum.is_a?(Symbol)
-    return cum *= arr.reduce(reg) if reg.is_a?(Symbol) && reg == :*
-    return cum += arr.reduce(reg) if reg.is_a?(Symbol) && cum.is_a?(Integer)
+    return arr(cum) if reg.nil? && cum.is_a?(Symbol)
+    return cum *= arr(reg) if reg.is_a?(Symbol) && reg == :*
+    return cum += arr(reg) if reg.is_a?(Symbol) && cum.is_a?(Integer)
 
     cum
   end

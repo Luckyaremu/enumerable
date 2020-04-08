@@ -1,3 +1,4 @@
+# Copy all the examples and paste into enumerable.rb, run the code to check that all methods works correctly
 
 puts 'my_each'
 

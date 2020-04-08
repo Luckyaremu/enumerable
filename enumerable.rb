@@ -56,8 +56,8 @@ module Enumerable
   end
 
   def my_any?(arg = nil)
-    return true if !block_given? && arg.nil? && !include?(nil) && !include?(false)
-    return true unless block_given? || !arg.nil?
+    return true if !block_given? && arg.nil? && (my_select { |x| return true if x }).empty? == false && empty? == false
+    return false unless block_given? || !arg.nil?
 
     if block_given?
       my_each { |x| return true if yield(x) == true }
@@ -72,17 +72,17 @@ module Enumerable
   end
 
   def my_none?(arg = nil)
-    return true if !block_given? && arg.nil? && include?(nil) == false && include?(false) == false
+    return true if !block_given? && arg.nil? && my_each { |x| return false if x == true }
     return false unless block_given? || !arg.nil?
 
     if block_given?
       my_each { |x| return false if yield(x) == true }
     elsif arg.class == Regexp
-      my_each { |x| return false if arg.match(x).nil? }
+      my_each { |x| return false unless arg.match(x).nil? }
     elsif arg.class <= Numeric || arg.class <= String
-      my_each { |x| return false if x != arg }
+      my_each { |x| return false if x == arg }
     else
-      my_each { |x| return false if (x.is_a? arg) == false }
+      my_each { |x| return false if x.class <= arg }
     end
     true
   end
@@ -113,21 +113,19 @@ module Enumerable
   end
 
   def my_map(proc = nil)
-    ar = self
-    new_arr = []
-    unless proc.nil?
-      each do |x|
-        return false unless proc.yield x
-      end
-      return true
-    end
-    return to_enum unless block_given? && proc.nil?
+    return to_enum(:my_map) if !block_given? && proc.nil?
 
-    ar.my_each do |j|
-      a = yield j
-      new_arr.append(a)
+    arr = []
+    if !proc.nil?
+      my_each do |x|
+        arr.push(proc.call(x))
+      end
+    else
+      my_each do |x|
+        arr.push(yield(x))
+      end
     end
-    new_arr
+    arr
   end
 
   # rubocop: disable Metrics/MethodLength
@@ -171,19 +169,3 @@ module Enumerable
 end
 
 # rubocop: enable Metrics/ModuleLength
-
-=begin
-p [1,2,3,4,5].my_all?
-p [1,2,3,4,5].my_any?
-p [1,2,3,4,5].my_none?
-
-
-arr = [1, 2, 3, 4, 5, 6]
-t = [nil, true, '']
-p arr.each.class == arr.my_each.class
-p t.each_with_index.class == t.my_each_with_index.class
-p t.my_select.class == t.my_select.class
-p t.count == t.my_count
-p t.map.class == t.my_map.class
-p arr.inject(:+) == arr.my_inject(:+)
-=end

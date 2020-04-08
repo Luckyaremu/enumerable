@@ -46,7 +46,7 @@ module Enumerable
     if block_given?
       my_each { |x| return false if yield(x) == false }
     elsif arg.class == Regexp
-      my_each { |x| return false if arg.mat(x).nil? }
+      my_each { |x| return false if arg.match(x).nil? }
     elsif arg.class <= Numeric || arg.class <= String
       my_each { |x| return false if x != arg }
     else
@@ -56,19 +56,19 @@ module Enumerable
   end
 
   def my_any?(arg = nil)
-    return true if !block_given? && arg.nil? && include?(nil) == false && include?(false) == false
-    return false unless block_given? || !arg.nil?
+    return true if !block_given? && arg.nil? && !include?(nil) && !include?(false)
+    return true unless block_given? || !arg.nil?
 
     if block_given?
       my_each { |x| return true if yield(x) == true }
     elsif arg.class == Regexp
-      my_each { |x| return true if arg.mat(x).nil? }
+      my_each { |x| return true unless arg.match(x).nil? }
     elsif arg.class <= Numeric || arg.class <= String
-      my_each { |x| return true if x != arg }
+      my_each { |x| return true if x == arg }
     else
-      my_each { |x| return true if (x.is_a? arg) == true }
+      my_each { |x| return true if x.class <= arg }
     end
-    true
+    false
   end
 
   def my_none?(arg = nil)
@@ -78,7 +78,7 @@ module Enumerable
     if block_given?
       my_each { |x| return false if yield(x) == true }
     elsif arg.class == Regexp
-      my_each { |x| return false if arg.mat(x).nil? }
+      my_each { |x| return false if arg.match(x).nil? }
     elsif arg.class <= Numeric || arg.class <= String
       my_each { |x| return false if x != arg }
     else
@@ -138,7 +138,7 @@ module Enumerable
       if cum.nil?
         mat = arr[0]
         arr[1...arr.length].my_each do |x|
-          mat = yield(acc, x)
+          mat = yield(mat, x)
         end
       else
         mat = cum
@@ -172,15 +172,18 @@ end
 
 # rubocop: enable Metrics/ModuleLength
 
+=begin
 p [1,2,3,4,5].my_all?
 p [1,2,3,4,5].my_any?
 p [1,2,3,4,5].my_none?
 
+
 arr = [1, 2, 3, 4, 5, 6]
-t = [nil, true,1, '']
+t = [nil, true, '']
 p arr.each.class == arr.my_each.class
 p t.each_with_index.class == t.my_each_with_index.class
 p t.my_select.class == t.my_select.class
 p t.count == t.my_count
 p t.map.class == t.my_map.class
 p arr.inject(:+) == arr.my_inject(:+)
+=end

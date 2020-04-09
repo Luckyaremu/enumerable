@@ -68,7 +68,7 @@ RSpec.describe Enumerable do
   end
 
   describe '#my_none' do
-    it 'returns true if all the elements matches' do
+    it 'returns false if all the elements matches' do
       expect(%w[ant bear cat].my_none? { |word| word.length >= 3 }).to eql(false)
     end
     it 'returns true if regexp matches all the elements' do
@@ -98,17 +98,29 @@ RSpec.describe Enumerable do
       expect([1, 2, 4, 2].my_count(&:even?)).to eql(3)
     end
   end
-  describe '#multiply_els' do
-    it 'multiplies the elements between each other' do
-    end
-  end
   describe '#my_map' do
     it 'returns a new array with the classes of each element of the array' do
       expect(%w[a b c].my_map(&:class)).to eql([String, String, String])
     end
+    it 'returns an array with the result of the Proc if a block and a Proc are passed' do
+      my_proc = proc { |num| num > 10 }
+      expect([18, 22, 5, 6] .my_map(my_proc) { |num| num < 10 }).to eql([true, true, false, false])
+    end
+    it 'returns an array with the classes of each element' do
+      expect(%w[a b c].my_map(&:class)).to eql([String, String, String])
+    end
   end
   describe '#my_inject' do
-    it 'returns a new array with the classes of each element of the array' do
+    it 'returns an array with the classes of each element' do
+      expect((5..10).my_inject { |sum, n| sum + n }).to eql(45)
+    end
+    it 'returns the result of the symbol given adding the initial pattern' do
+      expect([1, 1, 1].my_inject(2, :+)).to eql(5)
+    end
+    it 'returns the result of the block adding the initial pattern' do
+      expect((5..10).my_inject(2) { |sum, n| sum + n }).to eql(47)
+    end
+    it 'returns the result of the block' do
       expect((5..10).my_inject { |sum, n| sum + n }).to eql(45)
     end
   end

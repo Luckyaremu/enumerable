@@ -5,21 +5,50 @@ RSpec.describe Enumerable do
     it 'returns every single element of an array ' do
       expect([1, 2, 3, 4, 'hi'].my_each { |x| print x }).to eql([1, 2, 3, 4, 'hi'])
     end
+    it 'my_each positive case' do
+      expect([1, 2, 3, 4, 5].my_each.class.equal?([1, 2, 3, 4, 5].select.class)).to eq(true)
+    end
+    it 'my_each negative case' do
+      expect([1, 2, 3, 4, 5].my_each.class.equal?([1, 2, 3, 4, 5].select.class)).not_to eq(false)
+    end
   end
   describe '#my_each_with_index' do
     it 'returns every single element of an array ' do
       expect([1, 2, 3, 4, 'hi'].my_each_with_index { |x| print x }).to eql([1, 2, 3, 4, 'hi'])
+    end
+    it 'my_each_with_index positive case' do
+      expect([1, 2, 3, 4, 5].my_each_with_index.class.equal?([1, 2, 3, 4, 5].select.class)).to eq(true)
+    end
+    it 'my_each_with_index negative case' do
+      expect([1, 2, 3, 4, 5].my_each_with_index.class.equal?([1, 2, 3, 4, 5].select.class)).not_to eq(false)
     end
   end
   describe '#my_select' do
     it 'returns array of elements that matches the block' do
       expect([1, 2, 3, 4, 5, 6].my_select(&:even?)).to eql([2, 4, 6])
     end
+    it 'my_select positive case' do
+      expect([1, 2, 3, 4, 5].my_select.class.equal?([1, 2, 3, 4, 5].select.class)).to eq(true)
+    end
+    it 'my_select negative case' do
+      expect([1, 2, 3, 4, 5].my_select.class.equal?([1, 2, 3, 4, 5].select.class)).not_to eq(false)
+    end
   end
-
   describe '#my_all' do
     it 'returns true if all elements matches' do
       expect(%w[ant bear cat].my_all? { |word| word.length >= 3 }).to eql(true)
+    end
+    it 'returns true if regexp matches all the elements' do
+      expect(%w[ant bear cat].my_all?(/t/)).to eql(false)
+    end
+    it 'returns true if all elements belongs to the same class' do
+      expect([1, 2i, 3.14].my_all?(Numeric)).to eql(true)
+    end
+    it 'returns true if any of the elements are false or nil' do
+      expect([nil, true, 99].my_all?).to eql(false)
+    end
+    it 'returns true if the array is empty' do
+      expect([].my_all?).to eql(true)
     end
     it 'returns true if all the elements match the parameter' do
       expect([3, 4, 7, 11].my_all?(3)).to eql(false)
@@ -30,8 +59,20 @@ RSpec.describe Enumerable do
     it 'returns true if all the elements matches' do
       expect(%w[ant bear cat].my_any? { |word| word.length >= 3 }).to eql(true)
     end
+    it 'returns true if regexp matches all the elements' do
+      expect(%w[ant bear cat].my_any?(/d/)).to eql(false)
+    end
+    it 'returns true if all elements belongs to the same class' do
+      expect([nil, true, 99].my_any?(Integer)).to eql(true)
+    end
+    it 'returns true if any of the elements are false or nil' do
+      expect([nil, true, 99].my_any?).to eql(true)
+    end
     it 'returns false if the array is empty' do
       expect([].my_any?).to eql(false)
+    end
+    it 'returns true if all the elements match the parameter' do
+      expect([3, 4, 7, 11].my_any?(3)).to eql(true)
     end
   end
 
@@ -41,6 +82,18 @@ RSpec.describe Enumerable do
     end
     it 'returns true if regexp matches all the elements' do
       expect(%w[ant bear cat].my_none?(/d/)).to eql(true)
+    end
+    it 'returns true if all elements belongs to the same class' do
+      expect([nil, true, 99].my_none?(Integer)).to eql(false)
+    end
+    it 'returns true if any of the elements are false or nil' do
+      expect([nil, true, 99].my_none?).to eql(false)
+    end
+    it 'returns true if the array is empty' do
+      expect([].my_any?).to eql(false)
+    end
+    it 'returns true if all the elements match the parameter' do
+      expect([3, 4, 7, 11].my_none?(3)).to eql(false)
     end
   end
   describe '#my_count' do

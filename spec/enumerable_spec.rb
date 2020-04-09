@@ -5,33 +5,24 @@ RSpec.describe Enumerable do
     it 'returns every single element of an array ' do
       expect([1, 2, 3, 4, 'hi'].my_each { |x| print x }).to eql([1, 2, 3, 4, 'hi'])
     end
-    it 'my_each positive case' do
-      expect([1, 2, 3, 4, 5].my_each.class.equal?([1, 2, 3, 4, 5].select.class)).to eq(true)
-    end
     it 'my_each negative case' do
-      expect([1, 2, 3, 4, 5].my_each.class.equal?([1, 2, 3, 4, 5].select.class)).not_to eq(false)
+      expect([1, 2, 3, 4 ].my_each.class.equal?([1, 2, 3, 4, 5].select.class)).not_to eq(false)
     end
   end
   describe '#my_each_with_index' do
     it 'returns every single element of an array ' do
       expect([1, 2, 3, 4, 'hi'].my_each_with_index { |x| print x }).to eql([1, 2, 3, 4, 'hi'])
     end
-    it 'my_each_with_index positive case' do
-      expect([1, 2, 3, 4, 5].my_each_with_index.class.equal?([1, 2, 3, 4, 5].select.class)).to eq(true)
-    end
     it 'my_each_with_index negative case' do
-      expect([1, 2, 3, 4, 5].my_each_with_index.class.equal?([1, 2, 3, 4, 5].select.class)).not_to eq(false)
+      expect([1, 2, 3, 4].my_each_with_index.class.equal?([1, 2, 3, 4, 5].select.class)).not_to eq(false)
     end
   end
   describe '#my_select' do
     it 'returns array of elements that matches the block' do
       expect([1, 2, 3, 4, 5, 6].my_select(&:even?)).to eql([2, 4, 6])
     end
-    it 'my_select positive case' do
-      expect([1, 2, 3, 4, 5].my_select.class.equal?([1, 2, 3, 4, 5].select.class)).to eq(true)
-    end
     it 'my_select negative case' do
-      expect([1, 2, 3, 4, 5].my_select.class.equal?([1, 2, 3, 4, 5].select.class)).not_to eq(false)
+      expect([1, 2, 3, 4, 5, 6].my_select(&:even?)).not_to eql(false)
     end
   end
   describe '#my_all' do

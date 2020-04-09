@@ -6,7 +6,7 @@ RSpec.describe Enumerable do
       expect([1, 2, 3, 4, 'hi'].my_each { |x| print x }).to eql([1, 2, 3, 4, 'hi'])
     end
     it 'my_each negative case' do
-      expect([1, 2, 3, 4].my_each.class.equal?([1, 2, 3, 4, 5].select.class)).not_to eq(false)
+      expect([1, 2, 3, 4, ''].my_each.class.equal?([1, 2, 3, 4, ''].select.class)).not_to eq(false)
     end
   end
   describe '#my_each_with_index' do
@@ -14,7 +14,7 @@ RSpec.describe Enumerable do
       expect([1, 2, 3, 4, 'hi'].my_each_with_index { |x| print x }).to eql([1, 2, 3, 4, 'hi'])
     end
     it 'my_each_with_index negative case' do
-      expect([1, 2, 3, 4].my_each_with_index.class.equal?([1, 2, 3, 4, 5].select.class)).not_to eq(false)
+      expect([1, 2, 3, 4, ''].my_each_with_index.class.equal?([1, 2, 3, 4, ''].select.class)).not_to eq(false)
     end
   end
   describe '#my_select' do

@@ -1,4 +1,4 @@
-> Enumerable-Methods
+> Rspec Enumerable-Methods
 
 ## What does it do
 
@@ -40,6 +40,13 @@ Aremu Lucky
 - Github: [@githubhandle](https://github.com/Luckyaremu)
 - Twitter: [@twitterhandle](@luckyaremu)
 - Linkedin: [linkedin]()
+
+👤 **Kotoku Kennedy**
+
+- Github: [@kotoku-code](https://github.com/kotoku-code)
+- Twitter: [@kennedykotoku](https://twitter.com/kennedykotoku)
+- Linkedin: [Kotoku Kennedy](www.linkedin.com/in/kotoku-kennedy-5b04a9128)
+
 
 ## 🤝 Contributing
 

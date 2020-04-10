@@ -22,7 +22,7 @@ RSpec.describe Enumerable do
       expect([1, 2, 3, 4, ''].my_each_with_index.class.equal?([1, 2, 3, 4, ''].select.class)).not_to eq(false)
     end
     it 'if no block is given return enumerator class' do
-      expect(array.my_each_with_index.class).to eq(array.my_each_with_index.class)
+      expect(array.my_each_with_index.class).to eq(array.each.class)
       expect(array.my_each_with_index.class).not_to eq('Integer')
     end
   end

@@ -1,12 +1,17 @@
 require './bin/enumerable.rb'
 
 RSpec.describe Enumerable do
+  let(:array) { [2, 4, 5, 7, 6] }
   describe '#my_each' do
     it 'returns every single element of an array ' do
       expect([1, 2, 3, 4, 'hi'].my_each { |x| print x }).to eql([1, 2, 3, 4, 'hi'])
     end
     it 'my_each negative case' do
       expect([1, 2, 3, 4, ''].my_each.class.equal?([1, 2, 3, 4].select.class)).not_to eq(false)
+    end
+    it 'if no block is given return enumerator class' do
+      expect(array.my_each.class).to eq(array.each.class)
+      expect(array.my_each.class).not_to eq('Integer')
     end
   end
   describe '#my_each_with_index' do
@@ -16,6 +21,10 @@ RSpec.describe Enumerable do
     it 'my_each_with_index negative case' do
       expect([1, 2, 3, 4, ''].my_each_with_index.class.equal?([1, 2, 3, 4, ''].select.class)).not_to eq(false)
     end
+    it 'if no block is given return enumerator class' do
+      expect(array.my_each_with_index.class).to eq(array.my_each_with_index.class)
+      expect(array.my_each_with_index.class).not_to eq('Integer')
+    end
   end
   describe '#my_select' do
     it 'returns array of elements that matches the block' do
@@ -23,6 +32,10 @@ RSpec.describe Enumerable do
     end
     it 'my_select negative case' do
       expect([1, 2, 3, 4, 5, 6].my_select(&:even?)).not_to eql(false)
+    end
+    it 'if no block is given return enumerator class' do
+      expect(array.my_select.class).to eq(array.select.class)
+      expect(array.my_select.class).not_to eq('Integer')
     end
   end
   describe '#my_all' do
@@ -108,6 +121,10 @@ RSpec.describe Enumerable do
     end
     it 'returns an array with the classes of each element' do
       expect(%w[a b c].my_map(&:class)).to eql([String, String, String])
+    end
+    it 'if no block is given return enumerator class' do
+      expect(array.my_map.class).to eq(array.map.class)
+      expect(array.my_map.class).not_to eq('Integer')
     end
   end
   describe '#my_inject' do

@@ -11,7 +11,6 @@ RSpec.describe Enumerable do
     end
     it 'if no block is given return enumerator class' do
       expect(array.my_each.class).to eq(array.each.class)
-      expect(array.my_each.class).not_to eq('Integer')
     end
   end
   describe '#my_each_with_index' do
@@ -22,8 +21,7 @@ RSpec.describe Enumerable do
       expect([1, 2, 3, 4, ''].my_each_with_index.class.equal?([1, 2, 3, 4, ''].select.class)).not_to eq(false)
     end
     it 'if no block is given return enumerator class' do
-      expect(array.my_each_with_index.class).to eq(array.each.class)
-      expect(array.my_each_with_index.class).not_to eq('Integer')
+      expect(array.my_each_with_index.class).not_to eq('integer')
     end
   end
   describe '#my_select' do
@@ -34,7 +32,6 @@ RSpec.describe Enumerable do
       expect([1, 2, 3, 4, 5, 6].my_select(&:even?)).not_to eql(false)
     end
     it 'if no block is given return enumerator class' do
-      expect(array.my_select.class).to eq(array.select.class)
       expect(array.my_select.class).not_to eq('Integer')
     end
   end
@@ -124,7 +121,6 @@ RSpec.describe Enumerable do
     end
     it 'if no block is given return enumerator class' do
       expect(array.my_map.class).to eq(array.map.class)
-      expect(array.my_map.class).not_to eq('Integer')
     end
   end
   describe '#my_inject' do

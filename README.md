@@ -1,4 +1,4 @@
-> Enumerable-Methods
+> Rspec Enumerable-Methods
 
 ## What does it do
 
@@ -22,6 +22,7 @@ Clone the project unto your local machine cd to the folder run "ruby enumerable.
 ### Prerequisites
 
 - Get ruby latest version installed
+- Get latest RSPEC installed
 
 ### Setup
 
@@ -33,6 +34,8 @@ Clone the project unto your local machine cd to the folder run "ruby enumerable.
 - Install VSCode or any code editor you like
 - Install Node JS and nmp(most recents versions)
 - Run this command on your terminal in order to install stylelint: npm install stylelint stylelint-config-recommended --save-dev
+- Run this command on your terminal in order to install RSPEC: gem install rspec
+
 
 👤 **Author1**
 Aremu Lucky
@@ -40,6 +43,13 @@ Aremu Lucky
 - Github: [@githubhandle](https://github.com/Luckyaremu)
 - Twitter: [@twitterhandle](@luckyaremu)
 - Linkedin: [linkedin]()
+
+👤 **Kotoku Kennedy**
+
+- Github: [@kotoku-code](https://github.com/kotoku-code)
+- Twitter: [@kennedykotoku](https://twitter.com/kennedykotoku)
+- Linkedin: [Kotoku Kennedy](www.linkedin.com/in/kotoku-kennedy-5b04a9128)
+
 
 ## 🤝 Contributing
 
